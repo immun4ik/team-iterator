@@ -25,7 +25,7 @@ class Team {
     }
 }
 
-// Пример использования
+
 const team = new Team();
 team.add(new Character('Лучник', 'Bowman'));
 team.add(new Character('Мечник', 'Swordsman'));
