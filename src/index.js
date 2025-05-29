@@ -1,4 +1,4 @@
-// класс персонажа (Character)
+
 class Character {
     constructor({ name, type, health, level, attack, defence }) {
         this.name = name;
@@ -10,38 +10,43 @@ class Character {
     }
 }
 
-// команда с итератором и генератором
-class Team {
+
+export default class Team {
     constructor() {
-        this.members = new Set();
+        this.members = []; 
+        this.numberOfMembers = 0;
     }
 
     add(character) {
         if (!(character instanceof Character)) {
             throw new Error('Можно добавлять только объекты Character');
         }
-        this.members.add(character);
+        this.members.push(character);
+        this.numberOfMembers += 1;
     }
 
-    // Итератор 
+    // Iterator
     [Symbol.iterator]() {
-        const iterator = this.members.values();
+        let current = 0;
+        const { members, numberOfMembers } = this;
         return {
             next() {
-                return iterator.next();
+                if (current < numberOfMembers) {
+                    return {
+                        value: members[current++],
+                        done: false,
+                    };
+                }
+                return {
+                    value: undefined,
+                    done: true,
+                };
             },
         };
     }
-
-    // Генератор (удобный итератор)
-    *generator() {
-        for (const member of this.members) {
-            yield member;
-        }
-    }
 }
 
-// Демонстрация
+// example
 
 const team = new Team();
 
@@ -66,10 +71,5 @@ team.add(char2);
 
 console.log('Итератор:');
 for (const member of team) {
-    console.log(member);
-}
-
-console.log('Генератор:');
-for (const member of team.generator()) {
     console.log(member);
 }
