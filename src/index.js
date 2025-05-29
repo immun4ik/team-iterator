@@ -1,4 +1,3 @@
-
 class Character {
     constructor({ name, type, health, level, attack, defence }) {
         this.name = name;
@@ -10,43 +9,38 @@ class Character {
     }
 }
 
-
 export default class Team {
     constructor() {
-        this.members = []; 
-        this.numberOfMembers = 0;
+        this.members = [];
     }
 
     add(character) {
         if (!(character instanceof Character)) {
-            throw new Error('Можно добавлять только объекты Character');
+            throw new Error('Tolko obekti Character');
         }
         this.members.push(character);
-        this.numberOfMembers += 1;
     }
 
-    // Iterator
+
+    // function generator s yield
+    *memberGenerator() {
+        for (const member of this.members) {
+            yield member;
+        }
+    }
+
+    // Itarator v kotorom ispolnyaetsa generator
     [Symbol.iterator]() {
-        let current = 0;
-        const { members, numberOfMembers } = this;
+        const generator = this.memberGenerator(); 
+
         return {
-            next() {
-                if (current < numberOfMembers) {
-                    return {
-                        value: members[current++],
-                        done: false,
-                    };
-                }
-                return {
-                    value: undefined,
-                    done: true,
-                };
-            },
+            next: () => generator.next(), 
         };
     }
 }
 
-// example
+
+// Primer
 
 const team = new Team();
 
@@ -69,7 +63,7 @@ const char2 = new Character({
 team.add(char1);
 team.add(char2);
 
-console.log('Итератор:');
+console.log('Итератор (использующий генератор):');
 for (const member of team) {
     console.log(member);
 }
