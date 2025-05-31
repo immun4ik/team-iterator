@@ -12,6 +12,7 @@ class Character {
 export default class Team {
     constructor() {
         this.members = [];
+        this.current = 0; 
     }
 
     add(character) {
@@ -21,24 +22,28 @@ export default class Team {
         this.members.push(character);
     }
 
-
-    // function generator s yield
+    // Generator
     *memberGenerator() {
         for (const member of this.members) {
             yield member;
         }
     }
 
-    // Itarator v kotorom ispolnyaetsa generator
+    // Iterator
     [Symbol.iterator]() {
-        const generator = this.memberGenerator(); 
+        let currentIndex = 0; 
 
         return {
-            next: () => generator.next(), 
+            next: () => {
+                if (currentIndex < this.members.length) {
+                    return { done: false, value: this.members[currentIndex++] };
+                } else {
+                    return { done: true };
+                }
+            }
         };
     }
 }
-
 
 // Primer
 
@@ -63,7 +68,7 @@ const char2 = new Character({
 team.add(char1);
 team.add(char2);
 
-console.log('Итератор (использующий генератор):');
+console.log('resultat:');
 for (const member of team) {
     console.log(member);
 }
