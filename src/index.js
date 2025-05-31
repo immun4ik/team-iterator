@@ -1,4 +1,4 @@
-class Character {
+﻿class Character {
     constructor({ name, type, health, level, attack, defence }) {
         this.name = name;
         this.type = type;
@@ -12,7 +12,6 @@ class Character {
 export default class Team {
     constructor() {
         this.members = [];
-        this.current = 0; 
     }
 
     add(character) {
@@ -22,21 +21,13 @@ export default class Team {
         this.members.push(character);
     }
 
-    // Generator
-    *memberGenerator() {
-        for (const member of this.members) {
-            yield member;
-        }
-    }
-
-    // Iterator
     [Symbol.iterator]() {
-        let currentIndex = 0; 
+        let index = 0;
 
         return {
             next: () => {
-                if (currentIndex < this.members.length) {
-                    return { done: false, value: this.members[currentIndex++] };
+                if (index < this.members.length) {
+                    return { done: false, value: this.members[index++] };
                 } else {
                     return { done: true };
                 }
@@ -44,6 +35,7 @@ export default class Team {
         };
     }
 }
+
 
 // Primer
 
